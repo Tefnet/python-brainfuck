@@ -30,8 +30,9 @@ class TestParser(unittest.TestCase):
         self.assertEqual(self.bf.data[0], 1)
         
     def test_decrement_data_value(self):
+        self.bf.data = [10]
         self.bf.parse('-')
-        self.assertEqual(self.bf.data[0], -1)
+        self.assertEqual(self.bf.data[0], 9)
 
     def test_output_data(self):
         self.bf.parse('.')
@@ -44,6 +45,14 @@ class TestParser(unittest.TestCase):
     def test_hello(self):
         self.bf.parse(test_code)
         self.assertEqual(self.bf.result, test_result)
+
+    def test_8bit_overflow(self):
+        self.bf.parse('++++++++++++++++[>+++++++++++++++++++<-]>.')
+        self.assertEqual(self.bf.result, '0')
+
+    def test_8bit_underflow(self):
+        self.bf.parse('-.')
+        self.assertEqual(self.bf.result, '\xff')
 
 if __name__ == '__main__':
     unittest.main()

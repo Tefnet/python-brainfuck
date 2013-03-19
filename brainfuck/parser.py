@@ -35,10 +35,10 @@ class BFParser(object):
                 self.data_ptr -= 1 if self.data_ptr > 0 else 0
 
             elif instruction == '+':
-                self.data[self.data_ptr] += 1
+                self.data[self.data_ptr] = self.data[self.data_ptr] + 1 if self.data[self.data_ptr] < 255 else 0
 
             elif instruction == '-':
-                self.data[self.data_ptr] -= 1
+                self.data[self.data_ptr] = self.data[self.data_ptr] - 1 if self.data[self.data_ptr] > 0 else 255
 
             elif instruction == '.':
                 self.result += chr(self.data[self.data_ptr])
