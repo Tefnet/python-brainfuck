@@ -45,9 +45,11 @@ class MyHTTPHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
 class MyTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     daemon_threads = True
+    allow_reuse_address = True
 
 class MyUDPServer(SocketServer.ThreadingMixIn, SocketServer.UDPServer):
     daemon_threads = True
+    allow_reuse_address = True
 
 
 def main():
