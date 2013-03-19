@@ -4,6 +4,7 @@ import SocketServer
 import SimpleHTTPServer
 import socket, select
 import cgi
+import sys
 
 from brainfuck import BFParser
 
@@ -42,11 +43,18 @@ class MyHTTPHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.wfile.write('<html><body><form method="POST"><textarea rows="24" cols="80" name="code"></textarea><br/><input type="submit"/></form></body></html>')
         
 
+class MyTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+    daemon_threads = True
+
+class MyUDPServer(SocketServer.ThreadingMixIn, SocketServer.UDPServer):
+    daemon_threads = True
+
+
 def main():
     HOST, PORT = "localhost", 1982
-    tcp_server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
-    udp_server = SocketServer.UDPServer((HOST, PORT), MyUDPHandler)
-    http_server = SocketServer.TCPServer((HOST, PORT+1), MyHTTPHandler)
+    tcp_server = MyTCPServer((HOST, PORT), MyTCPHandler)
+    udp_server = MyUDPServer((HOST, PORT), MyUDPHandler)
+    http_server = MyTCPServer((HOST, PORT+1), MyHTTPHandler)
     servers = [tcp_server, udp_server, http_server]
 
     running = True
@@ -56,6 +64,7 @@ def main():
             for i in r:
                 i.handle_request()
         except KeyboardInterrupt:
+            sys.stderr.write('Shutting down...\n')
             for server in servers:
                 if hasattr(server, 'finish'):
                     server.finish()
