@@ -5,6 +5,7 @@ import SimpleHTTPServer
 import socket, select
 import cgi
 import sys
+import re
 
 from brainfuck import BFParser
 
@@ -35,7 +36,7 @@ class MyHTTPHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         self.send_response(200)
         self.end_headers()
-        self.wfile.write('<html><body><pre>%s</pre></body></html>' % result)
+        self.wfile.write('<html><body><pre>%s</pre></body></html>' % re.sub('<[^<]+?>', '',result))
 
     def do_GET(self):
         self.send_response(200)
