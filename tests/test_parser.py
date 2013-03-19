@@ -54,6 +54,14 @@ class TestParser(unittest.TestCase):
         self.bf.parse('-.')
         self.assertEqual(self.bf.result, '\xff')
 
+    def test_multistep_parser(self):
+        self.bf.parse('+++.')
+        self.assertEqual(self.bf.data[0], 3)
+        self.bf.parse('++++.')
+        self.assertEqual(self.bf.data[0], 7)
+        self.assertEqual(self.bf.result, '\3\7')
+
+
 if __name__ == '__main__':
     unittest.main()
 

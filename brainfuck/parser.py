@@ -5,8 +5,6 @@ class BFParser(object):
     def __init__(self, code=None):
         self.data = [0,]
         self.data_ptr = 0
-        self.pos = 0
-        self.loops = []
         self.result = ""
         
         if code:
@@ -14,6 +12,8 @@ class BFParser(object):
 
     def parse(self, code):
         self.code = code
+        self.pos = 0
+        self.loops = []
         self.code_len = len(code)
         while self.pos < self.code_len:
             instruction = self.code[self.pos]
